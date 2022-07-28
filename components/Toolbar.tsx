@@ -7,6 +7,7 @@ import {
   selectSearchState,
   selectPaginationState,
   setPagination,
+  setSorter,
 } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,9 +20,9 @@ export const Toolbar = () => {
   const dispatch = useDispatch();
 
   const resetPagination = () => {
+    dispatch(setSorter({ field: null, order: null }));
     if (pagination.current !== 1)
       dispatch(setPagination({ ...pagination, current: 1 }));
-    dispatch(setPagination({ ...pagination, current: 1 }));
   };
 
   const onSearch = (

@@ -22,48 +22,10 @@ interface DataType {
   registered: string;
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Username",
-    dataIndex: "login",
-    render: (login) => <span>{login.username}</span>,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    width: "30%",
-    sorter: true,
-    render: (name) => (
-      <span>
-        {name.first} {name.last}
-      </span>
-    ),
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    sorter: true,
-  },
-  {
-    title: "Gender",
-    dataIndex: "gender",
-    sorter: true,
-  },
-  {
-    title: "Registered Date",
-    dataIndex: "registered",
-    sorter: true,
-    width: "24%",
-    render: (registered) => (
-      <span>{moment(registered.date).format("DD-MM-YYYY HH:mm")}</span>
-    ),
-  },
-];
-
 export const UserTable = () => {
   const gender = useSelector(selectGenderState);
   const search = useSelector(selectSearchState);
-  const sorter = useSelector(selectSorterState);
+  const sorter: SorterResult<DataType> = useSelector(selectSorterState);
   const pagination = useSelector(selectPaginationState);
   const dispatch = useDispatch();
 
@@ -71,6 +33,48 @@ export const UserTable = () => {
 
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Username",
+      dataIndex: "login",
+      render: (login) => <span>{login.username}</span>,
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      width: "30%",
+      sorter: true,
+      sortOrder: sorter.field === "name" ? sorter.order : null,
+      render: (name) => (
+        <span>
+          {name.first} {name.last}
+        </span>
+      ),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      sorter: true,
+      sortOrder: sorter.field === "email" ? sorter.order : null,
+    },
+    {
+      title: "Gender",
+      dataIndex: "gender",
+      sorter: true,
+      sortOrder: sorter.field === "gender" ? sorter.order : null,
+    },
+    {
+      title: "Registered Date",
+      dataIndex: "registered",
+      sorter: true,
+      sortOrder: sorter.field === "registered" ? sorter.order : null,
+      width: "24%",
+      render: (registered) => (
+        <span>{moment(registered.date).format("DD-MM-YYYY HH:mm")}</span>
+      ),
+    },
+  ];
 
   const onChange: TableProps<DataType>["onChange"] = (
     pagination,
