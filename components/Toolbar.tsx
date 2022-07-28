@@ -37,8 +37,8 @@ export const Toolbar = () => {
   };
 
   const resetFilter = () => {
-    dispatch(setGender("all"));
     dispatch(setSearch(null));
+    dispatch(setGender("all"));
     resetPagination();
   };
 
