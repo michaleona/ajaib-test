@@ -24,8 +24,41 @@ A personal project website that contains a data table to display user data.
 
 1. Explain how Object Oriented Programming works with a thorough understanding of the keyword this
    and the new keyword.
+
+   **this**: `this` is actually a binding that is made when a function is invoked, and what it references is determined entirely by the call-site where the function is called.
+
+   **new**: Constructors are invoked using the `new` keyword. If we make a constructor call we will always receive an object in return. The main purpose of constructors is they allow us to implement reusable object creation code. JavaScript provides constructor functions for a lot of built-in objects, like `Date`.
+
 2. What is the new class syntax and how to create instance methods, class methods?
+
 3. Give an example of how to implement inheritance in ES2015 using extends and super.
+
+   ```
+   class Animal {
+    constructor(legs) {
+        this.legs = legs;
+    }
+    walk() {
+        console.log('walking on ' + this.legs + ' legs');
+    }
+   }
+
+   class Bird extends Animal {
+    constructor(legs) {
+        super(legs);
+    }
+    fly() {
+        console.log('flying');
+    }
+   }
+
+   let bird = new Bird(2);
+
+   bird.walk();
+   bird.fly();
+
+   ```
+
 4. Imagine refactoring an ES5 application to use ES2015, how would you go about it?
    - Remove the function keywords and add a fat arrow (=>) between the parentheses and curly brace
    - If the function only has one parameter, the parentheses around the parameter can be removed
