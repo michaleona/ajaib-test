@@ -1,9 +1,13 @@
 import { Row, Col, Input, Select, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { setGender } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Option } = Select;
 
 export const Toolbar = () => {
+  const dispatch = useDispatch();
+
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -11,7 +15,7 @@ export const Toolbar = () => {
   };
 
   const onGenderChange = (value: string) => {
-    console.log(value);
+    dispatch(setGender(value));
   };
 
   return (

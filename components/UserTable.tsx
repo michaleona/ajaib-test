@@ -54,9 +54,8 @@ export const UserTable = () => {
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
   const [pagination, setPagination] = useState({
-    buildOptionText: ({ value }: { value: string }) => `${value} / Halaman`,
     current: 1,
-    total: 0,
+    total: 100,
     pageSize: 10,
     showSizeChanger: false,
   });
@@ -78,16 +77,17 @@ export const UserTable = () => {
       return { ...prevState, current: pagination.current };
     });
 
-    loadUsers(params);
+    loadUsers(params, pagination);
   };
 
-  const loadUsers = (params = null) => {
+  const loadUsers = (params = null, pagination) => {
     setLoader(true);
     const queryParams: Params = new URLSearchParams();
+    console.log(pagination);
     queryParams.append("page", pagination.current);
     queryParams.append("pageSize", pagination.pageSize);
     queryParams.append("results", 100);
-    if (params && params.sorter.order) {
+    if (params && params.sorter) {
       queryParams.append("sortBy", params.sorter.field);
       queryParams.append("sortOrder", params.sorter.order);
     }
@@ -100,7 +100,7 @@ export const UserTable = () => {
   };
 
   useEffect(() => {
-    loadUsers();
+    loadUsers(null, pagination);
   }, []);
 
   return (

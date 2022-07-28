@@ -1,10 +1,11 @@
 import { Fragment } from "react";
 import Head from "next/head";
 import "antd/dist/antd.css";
+import { wrapper } from "../store/store";
 
 const prefix = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-export default ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }) => {
   return (
     <Fragment>
       <Head>
@@ -17,3 +18,5 @@ export default ({ Component, pageProps }) => {
     </Fragment>
   );
 };
+
+export default wrapper.withRedux(App);
