@@ -28,7 +28,6 @@ export const Toolbar = () => {
   const onSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    resetPagination();
     dispatch(setSearch(e.target.value));
   };
 
@@ -38,9 +37,9 @@ export const Toolbar = () => {
   };
 
   const resetFilter = () => {
-    resetPagination();
     dispatch(setGender("all"));
     dispatch(setSearch(null));
+    resetPagination();
   };
 
   return (
