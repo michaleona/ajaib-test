@@ -1,37 +1,57 @@
 import { Row, Col, Input, Select, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { setGender, setSearch, selectGenderState } from "../store/userSlice";
+import {
+  setGender,
+  setSearch,
+  selectGenderState,
+  selectSearchState,
+  selectPaginationState,
+  setPagination,
+} from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Option } = Select;
 
 export const Toolbar = () => {
   const gender = useSelector(selectGenderState);
+  const search = useSelector(selectSearchState);
+  const pagination = useSelector(selectPaginationState);
   const dispatch = useDispatch();
 
-  const onChange = (
+  const resetPagination = () => {
+    if (pagination.current !== 1)
+      dispatch(setPagination({ ...pagination, current: 1 }));
+    dispatch(setPagination({ ...pagination, current: 1 }));
+  };
+
+  const onSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    resetPagination();
     dispatch(setSearch(e.target.value));
   };
 
   const onGenderChange = (value: string) => {
+    resetPagination();
     dispatch(setGender(value));
   };
 
   const resetFilter = () => {
+    resetPagination();
     dispatch(setGender("all"));
+    dispatch(setSearch(null));
   };
 
   return (
     <Row gutter={8}>
-      <Col style={{ marginRight: 16 }}>
+      <Col>
         Search
         <Input
           prefix={<SearchOutlined />}
           placeholder="Search..."
           allowClear
-          onChange={onChange}
+          onChange={onSearch}
+          value={search}
         />
       </Col>
       <Col>

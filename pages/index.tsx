@@ -4,7 +4,7 @@ import { UserTable } from "../components/UserTable";
 
 export default () => {
   return (
-    <Row justify="center" style={{ paddingTop: 40 }}>
+    <Row justify="center" style={{ paddingTop: 60 }}>
       <Col span={16}>
         <Toolbar />
         <UserTable />

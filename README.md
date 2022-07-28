@@ -7,7 +7,8 @@ A personal project website that contains a data table to display user data.
 ## Features
 
 - Search by keyword (debounced)
-- Filter by Gender and reset Filter
+- Filter by Gender
+- Reset Filter
 - Pagination
 - Sort in every table column header
 
