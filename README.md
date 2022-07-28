@@ -31,4 +31,14 @@ A personal project website that contains a data table to display user data.
 6. What are your preferred ways of testing your web application?
 7. Which web server do you use? Why? Explain pros and cons of your choice.
 8. What is your preferred production deployment process?
-9. Give an example of clean README.md documentation.
+9. Give an example of clean README.md documentation.  
+   The clean README.md consist of:
+
+- Title
+- Overview
+- Features
+- Running the project
+- Dependencies
+  Optional additions:
+- To-do list
+- Contributors
