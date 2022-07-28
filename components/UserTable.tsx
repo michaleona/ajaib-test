@@ -21,7 +21,6 @@ interface DataType {
   email: string;
   registered: string;
 }
-
 export const UserTable = () => {
   const gender = useSelector(selectGenderState);
   const search = useSelector(selectSearchState);
@@ -33,7 +32,6 @@ export const UserTable = () => {
 
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
-
   const columns: ColumnsType<DataType> = [
     {
       title: "Username",
@@ -86,7 +84,6 @@ export const UserTable = () => {
       dispatch(setSorter(sorter as SorterResult<DataType>));
     }
     dispatch(setPagination({ ...pagination, current: pagination.current }));
-    loadUsers(sorter, pagination);
   };
 
   const loadUsers = (sorter, pagination) => {
@@ -108,7 +105,7 @@ export const UserTable = () => {
     queryParams.append("results", 100);
 
     fetch(
-      `https://randomuser.me/api?inc=gender,name,registered,login,email&${queryParams.toString()}`
+      `https://randomuser.me/api?inc=gender,name,registered,login,email,phone&${queryParams.toString()}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -123,7 +120,7 @@ export const UserTable = () => {
 
   useEffect(() => {
     loadUsers(sorter, pagination);
-  }, [gender, debouncedSearch]);
+  }, [gender, debouncedSearch, pagination, sorter]);
 
   return (
     <Table
@@ -134,6 +131,7 @@ export const UserTable = () => {
       showSorterTooltip={false}
       dataSource={users}
       onChange={onChange}
+      rowKey="phone"
     />
   );
 };
