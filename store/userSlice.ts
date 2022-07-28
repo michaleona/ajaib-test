@@ -7,6 +7,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 // Type for our state
 export interface UserState {
   gender: string;
+  search: string;
   isLoading: boolean;
   users: any;
 }
@@ -14,6 +15,7 @@ export interface UserState {
 // Initial state
 const initialState: UserState = {
   gender: "all",
+  search: "",
   isLoading: true,
   users: null
 };
@@ -32,8 +34,8 @@ export const userSlice = createSlice({
       state.isLoading = action.payload;
     },
 
-    setUsers(state, action) {
-      state.users = action.payload;
+    setSearch(state, action) {
+      state.search = action.payload;
     },
     // Special reducer for hydrating the state. Special case for next-redux-wrapper
     // extraReducers: {
@@ -48,8 +50,9 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setGender, setLoader, setUsers } = userSlice.actions;
+export const { setGender, setLoader, setSearch } = userSlice.actions;
 
 export const selectGenderState = (state: AppState) => state.user.gender;
+export const selectSearchState = (state: AppState) => state.user.search;
 
 export default userSlice.reducer;

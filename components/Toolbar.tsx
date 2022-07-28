@@ -1,6 +1,6 @@
 import { Row, Col, Input, Select, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { setGender, selectGenderState } from "../store/userSlice";
+import { setGender, setSearch, selectGenderState } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Option } = Select;
@@ -12,7 +12,7 @@ export const Toolbar = () => {
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    console.log(e);
+    dispatch(setSearch(e.target.value));
   };
 
   const onGenderChange = (value: string) => {

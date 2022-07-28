@@ -1,8 +1,8 @@
-import { Table } from "antd";
+import { Table, message } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useState, useEffect } from "react";
-import { selectGenderState } from "../store/userSlice";
+import { selectGenderState, selectSearchState } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 interface DataType {
@@ -13,10 +13,7 @@ interface DataType {
 }
 
 interface ParamsType {
-  sorter: {
-    field: "";
-    order: "";
-  };
+  sorter: {};
 }
 
 const columns: ColumnsType<DataType> = [
@@ -57,6 +54,7 @@ const columns: ColumnsType<DataType> = [
 
 export const UserTable = () => {
   const gender = useSelector(selectGenderState);
+  const search = useSelector(selectSearchState);
 
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
@@ -85,32 +83,37 @@ export const UserTable = () => {
   const loadUsers = (params = null, pagination) => {
     setLoader(true);
     const queryParams: Params = new URLSearchParams();
-    console.log(pagination);
     queryParams.append("page", pagination.current);
     queryParams.append("pageSize", pagination.pageSize);
     queryParams.append("results", 100);
-    if (params && params.sorter.order) {
-      queryParams.append("sortBy", params.sorter.field);
-      queryParams.append("sortOrder", params.sorter.order);
+    if (params && params.sorter) {
+      if (params.sorter.order !== undefined) {
+        queryParams.append("sortBy", params.sorter.field);
+        queryParams.append("sortOrder", params.sorter.order);
+      }
     }
     if (gender && gender !== "all") {
       queryParams.append("gender", gender);
     }
-    fetch(`https://randomuser.me/api?${queryParams.toString()}`)
+    if (search) {
+      queryParams.append("keyword", "anto");
+    }
+    fetch(
+      `https://randomuser.me/api?inc=gender,name,registered,login,${queryParams.toString()}&seed=abc`
+    )
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.results);
         setLoader(false);
+      })
+      .catch(() => {
+        message.error("Cannot fetch data. Reload the page.");
       });
   };
 
   useEffect(() => {
     loadUsers(null, pagination);
-  }, []);
-
-  useEffect(() => {
-    loadUsers(null, pagination);
-  }, [gender]);
+  }, [gender, search]);
 
   return (
     <Table
