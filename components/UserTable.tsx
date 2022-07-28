@@ -3,7 +3,7 @@ import type { ColumnsType, TableProps } from "antd/es/table";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useState, useEffect } from "react";
 import { selectGenderState, selectSearchState } from "../store/userSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useDebounce from "../hooks/useDebounce";
 
 interface DataType {
@@ -68,8 +68,7 @@ export const UserTable = () => {
     showSizeChanger: false,
   });
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
+  const onChange = (pagination, sorter) => {
     let params: ParamsType = {
       sorter: null,
     };
