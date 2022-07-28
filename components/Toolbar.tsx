@@ -1,10 +1,14 @@
 import { Row, Col, Input, Select, Button } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
-const { Search } = Input;
 const { Option } = Select;
 
 export const Toolbar = () => {
-  const onSearch = (value: string) => console.log(value);
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    console.log(e);
+  };
 
   const onGenderChange = (value: string) => {
     console.log(value);
@@ -12,9 +16,14 @@ export const Toolbar = () => {
 
   return (
     <Row gutter={8}>
-      <Col>
+      <Col style={{ marginRight: 16 }}>
         Search
-        <Search placeholder="Search..." onSearch={onSearch} enterButton />
+        <Input
+          prefix={<SearchOutlined />}
+          placeholder="Search..."
+          allowClear
+          onChange={onChange}
+        />
       </Col>
       <Col>
         Gender
