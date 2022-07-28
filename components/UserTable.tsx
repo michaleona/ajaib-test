@@ -2,6 +2,8 @@ import { Table } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useState, useEffect } from "react";
+import { selectGenderState } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 interface DataType {
   login: string;
@@ -11,7 +13,10 @@ interface DataType {
 }
 
 interface ParamsType {
-  sorter: {};
+  sorter: {
+    field: "";
+    order: "";
+  };
 }
 
 const columns: ColumnsType<DataType> = [
@@ -51,6 +56,8 @@ const columns: ColumnsType<DataType> = [
 ];
 
 export const UserTable = () => {
+  const gender = useSelector(selectGenderState);
+
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
   const [pagination, setPagination] = useState({
@@ -60,12 +67,7 @@ export const UserTable = () => {
     showSizeChanger: false,
   });
 
-  const onChange: TableProps<DataType>["onChange"] = (
-    pagination,
-    filters,
-    sorter,
-    extra
-  ) => {
+  const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
     let params: ParamsType = {
       sorter: null,
@@ -87,9 +89,12 @@ export const UserTable = () => {
     queryParams.append("page", pagination.current);
     queryParams.append("pageSize", pagination.pageSize);
     queryParams.append("results", 100);
-    if (params && params.sorter) {
+    if (params && params.sorter.order) {
       queryParams.append("sortBy", params.sorter.field);
       queryParams.append("sortOrder", params.sorter.order);
+    }
+    if (gender && gender !== "all") {
+      queryParams.append("gender", gender);
     }
     fetch(`https://randomuser.me/api?${queryParams.toString()}`)
       .then((res) => res.json())
@@ -102,6 +107,10 @@ export const UserTable = () => {
   useEffect(() => {
     loadUsers(null, pagination);
   }, []);
+
+  useEffect(() => {
+    loadUsers(null, pagination);
+  }, [gender]);
 
   return (
     <Table

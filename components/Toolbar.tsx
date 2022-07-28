@@ -1,11 +1,12 @@
 import { Row, Col, Input, Select, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { setGender } from "../store/userSlice";
+import { setGender, selectGenderState } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Option } = Select;
 
 export const Toolbar = () => {
+  const gender = useSelector(selectGenderState);
   const dispatch = useDispatch();
 
   const onChange = (
@@ -16,6 +17,10 @@ export const Toolbar = () => {
 
   const onGenderChange = (value: string) => {
     dispatch(setGender(value));
+  };
+
+  const resetFilter = () => {
+    dispatch(setGender("all"));
   };
 
   return (
@@ -36,6 +41,7 @@ export const Toolbar = () => {
           onChange={onGenderChange}
           defaultValue="all"
           style={{ width: 120 }}
+          value={gender}
         >
           <Option value="all">All</Option>
           <Option value="male">Male</Option>
@@ -44,7 +50,7 @@ export const Toolbar = () => {
       </Col>
       <Col>
         <br />
-        <Button>Reset Filter</Button>
+        <Button onClick={() => resetFilter()}>Reset Filter</Button>
       </Col>
     </Row>
   );
