@@ -4,6 +4,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useState, useEffect } from "react";
 import { selectGenderState, selectSearchState } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import useDebounce from "../hooks/useDebounce";
 
 interface DataType {
   login: string;
@@ -56,6 +57,8 @@ export const UserTable = () => {
   const gender = useSelector(selectGenderState);
   const search = useSelector(selectSearchState);
 
+  const debouncedSearch = useDebounce(search, 500);
+
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
   const [pagination, setPagination] = useState({
@@ -95,8 +98,8 @@ export const UserTable = () => {
     if (gender && gender !== "all") {
       queryParams.append("gender", gender);
     }
-    if (search) {
-      queryParams.append("keyword", "anto");
+    if (debouncedSearch) {
+      queryParams.append("keyword", debouncedSearch);
     }
     fetch(
       `https://randomuser.me/api?inc=gender,name,registered,login,${queryParams.toString()}&seed=abc`
@@ -113,7 +116,7 @@ export const UserTable = () => {
 
   useEffect(() => {
     loadUsers(null, pagination);
-  }, [gender, search]);
+  }, [gender, debouncedSearch]);
 
   return (
     <Table
