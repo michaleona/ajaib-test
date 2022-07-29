@@ -5,9 +5,7 @@ import {
   setSearch,
   selectGenderState,
   selectSearchState,
-  selectPaginationState,
-  setPagination,
-  setSorter,
+  setResetFilter,
 } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,14 +14,7 @@ const { Option } = Select;
 export const Toolbar = () => {
   const gender = useSelector(selectGenderState);
   const search = useSelector(selectSearchState);
-  const pagination = useSelector(selectPaginationState);
   const dispatch = useDispatch();
-
-  const resetPagination = () => {
-    dispatch(setSorter({ field: null, order: null }));
-    if (pagination.current !== 1)
-      dispatch(setPagination({ ...pagination, current: 1 }));
-  };
 
   const onSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -32,14 +23,11 @@ export const Toolbar = () => {
   };
 
   const onGenderChange = (value: string) => {
-    resetPagination();
     dispatch(setGender(value));
   };
 
   const resetFilter = () => {
-    dispatch(setSearch(null));
-    dispatch(setGender("all"));
-    resetPagination();
+    dispatch(setResetFilter());
   };
 
   return (

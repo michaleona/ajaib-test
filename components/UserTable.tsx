@@ -2,7 +2,7 @@ import { Table, message } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import type { SorterResult } from "antd/es/table/interface";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   selectGenderState,
   selectPaginationState,
@@ -10,6 +10,8 @@ import {
   selectSorterState,
   setSorter,
   setPagination,
+  setIsResetFilter,
+  selectResetFilterState,
 } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import useDebounce from "../hooks/useDebounce";
@@ -26,8 +28,10 @@ export const UserTable = () => {
   const search = useSelector(selectSearchState);
   const sorter: SorterResult<DataType> = useSelector(selectSorterState);
   const pagination = useSelector(selectPaginationState);
+  const resetFilter = useSelector(selectResetFilterState);
   const dispatch = useDispatch();
 
+  const firstUpdate = useRef(true);
   const debouncedSearch = useDebounce(search, 500);
 
   const [users, setUsers] = useState(null);
@@ -120,7 +124,21 @@ export const UserTable = () => {
 
   useEffect(() => {
     loadUsers(sorter, pagination);
-  }, [gender, debouncedSearch, pagination, sorter]);
+  }, [pagination, sorter]);
+
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    if (resetFilter) {
+      console.log("Reset");
+      dispatch(setIsResetFilter(false));
+      return;
+    }
+    dispatch(setPagination({ ...pagination, current: 1 }));
+    dispatch(setSorter({ field: null, order: null }));
+  }, [debouncedSearch, gender]);
 
   return (
     <Table

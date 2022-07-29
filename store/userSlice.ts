@@ -14,6 +14,7 @@ export interface UserState {
   isLoading: boolean;
   sorter: Record<string, string>;
   pagination: Record<string, string | number | boolean>;
+  isResetFilter: boolean;
 }
 
 // Initial state
@@ -30,7 +31,8 @@ const initialState: UserState = {
     total: 100,
     pageSize: 10,
     showSizeChanger: false,
-  }
+  },
+  isResetFilter: false
 };
 
 // Actual Slice
@@ -58,15 +60,26 @@ export const userSlice = createSlice({
     setPagination(state, action) {
       state.pagination = action.payload;
     },
+    setResetFilter(state) {
+      state.isResetFilter = true;
+      state.search = null;
+      state.gender = "all";
+      state.pagination = { ...state.pagination, current: 1 };
+      state.sorter = { field: null, order: null };
+    },
+    setIsResetFilter(state, action) {
+      state.isResetFilter = action.payload;
+    }
 
   },
 });
 
-export const { setGender, setLoader, setSearch, setSorter, setPagination } = userSlice.actions;
+export const { setGender, setLoader, setSearch, setSorter, setPagination, setResetFilter, setIsResetFilter } = userSlice.actions;
 
 export const selectGenderState = (state: AppState) => state.user.gender;
 export const selectSearchState = (state: AppState) => state.user.search;
 export const selectSorterState = (state: AppState) => state.user.sorter;
 export const selectPaginationState = (state: AppState) => state.user.pagination;
+export const selectResetFilterState = (state: AppState) => state.user.isResetFilter;
 
 export default userSlice.reducer;
