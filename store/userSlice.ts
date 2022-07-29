@@ -1,16 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
-interface DataType {
-  login: string;
-  name: string;
-  email: string;
-  registered: string;
-}
 
 // Type for our state
 export interface UserState {
-  gender: string;
-  search: string | null;
+  filters: Record<string, any>;
   isLoading: boolean;
   sorter: Record<string, string>;
   pagination: Record<string, string | number | boolean>;
@@ -19,8 +12,10 @@ export interface UserState {
 
 // Initial state
 const initialState: UserState = {
-  gender: "all",
-  search: null,
+  filters: {
+    gender: "all",
+    search: null
+  },
   isLoading: true,
   sorter: {
     field: null,
@@ -41,16 +36,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
 
-    setGender(state, action) {
-      state.gender = action.payload;
+    setFilters(state, action) {
+      state.filters = action.payload;
     },
 
     setLoader(state, action) {
       state.isLoading = action.payload;
-    },
-
-    setSearch(state, action) {
-      state.search = action.payload;
     },
 
     setSorter(state, action) {
@@ -62,8 +53,10 @@ export const userSlice = createSlice({
     },
     setResetFilter(state) {
       state.isResetFilter = true;
-      state.search = null;
-      state.gender = "all";
+      state.filters = {
+        gender: "all",
+        search: null
+      };
       state.pagination = { ...state.pagination, current: 1 };
       state.sorter = { field: null, order: null };
     },
@@ -74,10 +67,9 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setGender, setLoader, setSearch, setSorter, setPagination, setResetFilter, setIsResetFilter } = userSlice.actions;
+export const { setFilters, setLoader, setSorter, setPagination, setResetFilter, setIsResetFilter } = userSlice.actions;
 
-export const selectGenderState = (state: AppState) => state.user.gender;
-export const selectSearchState = (state: AppState) => state.user.search;
+export const selectFiltersState = (state: AppState) => state.user.filters;
 export const selectSorterState = (state: AppState) => state.user.sorter;
 export const selectPaginationState = (state: AppState) => state.user.pagination;
 export const selectResetFilterState = (state: AppState) => state.user.isResetFilter;

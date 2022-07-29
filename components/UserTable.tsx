@@ -4,9 +4,8 @@ import type { SorterResult } from "antd/es/table/interface";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useState, useEffect, useRef } from "react";
 import {
-  selectGenderState,
   selectPaginationState,
-  selectSearchState,
+  selectFiltersState,
   selectSorterState,
   setSorter,
   setPagination,
@@ -14,7 +13,6 @@ import {
   selectResetFilterState,
 } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import useDebounce from "../hooks/useDebounce";
 import moment from "moment";
 
 interface DataType {
@@ -24,15 +22,13 @@ interface DataType {
   registered: string;
 }
 export const UserTable = () => {
-  const gender = useSelector(selectGenderState);
-  const search = useSelector(selectSearchState);
+  const filters = useSelector(selectFiltersState);
   const sorter: SorterResult<DataType> = useSelector(selectSorterState);
   const pagination = useSelector(selectPaginationState);
   const resetFilter = useSelector(selectResetFilterState);
   const dispatch = useDispatch();
 
   const firstUpdate = useRef(true);
-  const debouncedSearch = useDebounce(search, 500);
 
   const [users, setUsers] = useState(null);
   const [isLoading, setLoader] = useState(true);
@@ -98,11 +94,11 @@ export const UserTable = () => {
       queryParams.append("sortBy", sorter.field);
       queryParams.append("sortOrder", sorter.order);
     }
-    if (gender && gender !== "all") {
-      queryParams.append("gender", gender);
+    if (filters.gender && filters.gender !== "all") {
+      queryParams.append("gender", filters.gender);
     }
-    if (debouncedSearch) {
-      queryParams.append("keyword", debouncedSearch);
+    if (filters.search) {
+      queryParams.append("keyword", filters.search);
     }
     queryParams.append("page", pagination.current);
     queryParams.append("pageSize", pagination.pageSize);
@@ -137,7 +133,7 @@ export const UserTable = () => {
     }
     dispatch(setPagination({ ...pagination, current: 1 }));
     dispatch(setSorter({ field: null, order: null }));
-  }, [debouncedSearch, gender]);
+  }, [filters]);
 
   return (
     <Table

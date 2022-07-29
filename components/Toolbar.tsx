@@ -1,34 +1,40 @@
 import { Row, Col, Input, Select, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import {
-  setGender,
-  setSearch,
-  selectGenderState,
-  selectSearchState,
+  setFilters,
+  selectFiltersState,
   setResetFilter,
 } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import useDebounce from "../hooks/useDebounce";
 
 const { Option } = Select;
 
 export const Toolbar = () => {
-  const gender = useSelector(selectGenderState);
-  const search = useSelector(selectSearchState);
+  const [search, setSearch] = useState(null);
+  const filters = useSelector(selectFiltersState);
   const dispatch = useDispatch();
+
+  const debouncedSearch = useDebounce(search, 500);
 
   const onSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    dispatch(setSearch(e.target.value));
+    setSearch(e.target.value);
   };
 
   const onGenderChange = (value: string) => {
-    dispatch(setGender(value));
+    dispatch(setFilters({ ...filters, gender: value }));
   };
 
   const resetFilter = () => {
     dispatch(setResetFilter());
   };
+
+  useEffect(() => {
+    dispatch(setFilters({ ...filters, search: debouncedSearch }));
+  }, [debouncedSearch]);
 
   return (
     <Row gutter={8}>
@@ -49,7 +55,7 @@ export const Toolbar = () => {
           onChange={onGenderChange}
           defaultValue="all"
           style={{ width: 120 }}
-          value={gender}
+          value={filters.gender}
         >
           <Option value="all">All</Option>
           <Option value="male">Male</Option>
