@@ -29,6 +29,7 @@ export const Toolbar = () => {
   };
 
   const resetFilter = () => {
+    setSearch(null);
     dispatch(setResetFilter());
   };
 
