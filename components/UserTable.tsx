@@ -132,7 +132,6 @@ export const UserTable = () => {
       return;
     }
     if (resetFilter) {
-      console.log("Reset");
       dispatch(setIsResetFilter(false));
       return;
     }
