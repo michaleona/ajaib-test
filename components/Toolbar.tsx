@@ -13,6 +13,7 @@ const { Option } = Select;
 
 export const Toolbar = () => {
   const [search, setSearch] = useState(null);
+  const [isReset, setReset] = useState(false);
   const filters = useSelector(selectFiltersState);
   const dispatch = useDispatch();
   const firstUpdate = useRef(true);
@@ -31,6 +32,7 @@ export const Toolbar = () => {
 
   const resetFilter = () => {
     setSearch(null);
+    setReset(true);
     dispatch(setResetFilter());
   };
 
@@ -39,7 +41,11 @@ export const Toolbar = () => {
       firstUpdate.current = false;
       return;
     }
-    dispatch(setFilters({ ...filters, search: debouncedSearch }));
+    if (isReset) {
+      setReset(false);
+    } else {
+      dispatch(setFilters({ ...filters, search: debouncedSearch }));
+    }
   }, [debouncedSearch]);
 
   return (
