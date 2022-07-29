@@ -31,6 +31,13 @@ A personal project website that contains a data table to display user data.
 
 2. What is the new class syntax and how to create instance methods, class methods?
 
+   A class method is a method defined within the scope of a class and the defined class method gives the class
+   functionality.
+
+   An instance method is similar to a class method in that they both are defined within the scope of a specific
+   class. However, an instance method gives functionality to a single instance of that class, not the class as a
+   whole.
+
 3. Give an example of how to implement inheritance in ES2015 using extends and super.
 
    ```
@@ -64,6 +71,18 @@ A personal project website that contains a data table to display user data.
    - If the function only has one parameter, the parentheses around the parameter can be removed
    - If the function has a return expression — we can remove the curly braces, remove the semi-colon after the expression, remove the “return” keyword and there will be an implicit return of the expression
 5. Give an example of how you structure applications with design patterns using closure and modules.
+   ```
+    class Animal {
+     private animals = ['Bird', 'Cat', 'Dog'];
+     get Animals() {
+      return this.animals;
+     }
+    }
+    const animal = new Animal();
+    console.log(animal.Animals); // ['Bird', 'Cat', 'Dog']
+    console.log(animal.animals); // ['Bird', 'Cat', 'Dog']
+    // Property 'animals' is private and only accessible within class 'Animal'.
+   ```
 6. What are your preferred ways of testing your web application?
 
    End-to-end testing using Cypress.
