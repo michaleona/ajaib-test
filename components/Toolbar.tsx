@@ -6,7 +6,7 @@ import {
   setResetFilter,
 } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import useDebounce from "../hooks/useDebounce";
 
 const { Option } = Select;
@@ -15,6 +15,7 @@ export const Toolbar = () => {
   const [search, setSearch] = useState(null);
   const filters = useSelector(selectFiltersState);
   const dispatch = useDispatch();
+  const firstUpdate = useRef(true);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -34,6 +35,10 @@ export const Toolbar = () => {
   };
 
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
     dispatch(setFilters({ ...filters, search: debouncedSearch }));
   }, [debouncedSearch]);
 
