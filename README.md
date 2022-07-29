@@ -46,7 +46,7 @@ A personal project website that contains a data table to display user data.
         this.legs = legs;
     }
     walk() {
-        console.log('walking on ' + this.legs + ' legs');
+        console.log(`walking on ${this.legs} legs`);
     }
    }
 
